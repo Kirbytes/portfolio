@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Minus, Square } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -14,6 +14,8 @@ interface WindowProps {
   className?: string;
   initialX?: number;
   initialY?: number;
+  defaultWidth?: number;
+  defaultHeight?: number;
 }
 
 export function Window({
@@ -24,8 +26,11 @@ export function Window({
   className,
   initialX = 100,
   initialY = 100,
+  defaultWidth = 500,
+  defaultHeight = 400,
 }: WindowProps) {
   const { windows, activeWindowId, closeWindow, minimizeWindow, maximizeWindow, focusWindow } = useWindowManager();
+  const [size, setSize] = useState({ width: defaultWidth, height: defaultHeight });
   const state = windows[id];
 
   if (!state.isOpen) return null;
@@ -40,10 +45,10 @@ export function Window({
           animate={{
             opacity: 1,
             scale: 1,
-            x: state.isMaximized ? 0 : initialX,
-            y: state.isMaximized ? 48 : initialY,
-            width: state.isMaximized ? '100vw' : 'auto',
-            height: state.isMaximized ? 'calc(100vh - 48px - 80px)' : 'auto',
+            x: state.isMaximized ? 0 : undefined,
+            y: state.isMaximized ? 48 : undefined,
+            width: state.isMaximized ? '100vw' : size.width,
+            height: state.isMaximized ? 'calc(100vh - 48px - 80px)' : size.height,
           }}
           exit={{ opacity: 0, scale: 0.98 }}
           onPointerDown={() => focusWindow(id)}
@@ -84,9 +89,29 @@ export function Window({
           </div>
 
           <div className="flex-1 overflow-auto bg-[var(--card)] p-0 relative">
-            <div className="min-h-full">
+            <div className="min-h-full pb-6">
               {children}
             </div>
+            
+            {/* Resize Handle */}
+            {!state.isMaximized && (
+              <motion.div
+                drag
+                dragConstraints={{ left: 0, top: 0, right: 0, bottom: 0 }}
+                dragElastic={0}
+                dragMomentum={false}
+                onDrag={(event, info) => {
+                  setSize(prev => ({
+                    width: Math.max(320, prev.width + info.delta.x),
+                    height: Math.max(240, prev.height + info.delta.y)
+                  }));
+                }}
+                className="absolute bottom-0 right-0 w-6 h-6 cursor-nwse-resize z-[100] flex items-end justify-end p-1 group"
+                onPointerDown={(e) => e.stopPropagation()}
+              >
+                <div className="w-3 h-3 border-r-2 border-b-2 border-black dark:border-[#05d9e8] opacity-30 group-hover:opacity-100 transition-opacity" />
+              </motion.div>
+            )}
           </div>
         </motion.div>
       )}

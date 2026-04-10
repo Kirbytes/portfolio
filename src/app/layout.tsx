@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { WindowProvider } from "@/context/window-context";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const inter = Inter({ subsets: ["latin"], variable: '--font-inter' });
 const spaceGrotesk = Space_Grotesk({ 
@@ -25,6 +27,8 @@ export default function RootLayout({
         <WindowProvider>
           {children}
         </WindowProvider>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

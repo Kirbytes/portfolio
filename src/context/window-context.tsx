@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState, useCallback, ReactNode } from 'react';
 
-export type WindowId = 'about' | 'experience' | 'projects' | 'blog' | 'contact' | 'terminal' | 'settings' | 'photos';
+export type WindowId = 'about' | 'experience' | 'projects' | 'blog' | 'contact' | 'terminal' | 'settings' | 'photos' | 'stats';
 
 interface WindowState {
   id: WindowId;
@@ -37,6 +37,7 @@ const INITIAL_WINDOWS_STATE: Record<WindowId, WindowState> = {
   terminal: { id: 'terminal', isOpen: false, isMaximized: false, isMinimized: false, zIndex: 10 },
   settings: { id: 'settings', isOpen: false, isMaximized: false, isMinimized: false, zIndex: 10 },
   photos: { id: 'photos', isOpen: false, isMaximized: false, isMinimized: false, zIndex: 10 },
+  stats: { id: 'stats', isOpen: false, isMaximized: false, isMinimized: false, zIndex: 10 },
 };
 
 export const WindowProvider = ({ children }: { children: ReactNode }) => {

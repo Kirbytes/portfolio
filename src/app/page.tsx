@@ -14,7 +14,9 @@ import {
   History, 
   Settings as SettingsIcon,
   LayoutGrid,
-  Code
+  Code,
+  BarChart3,
+  ExternalLink
 } from "lucide-react";
 
 export default function Home() {
@@ -33,11 +35,12 @@ export default function Home() {
         {/* Column 1 */}
         <DesktopIcon label="profile.exe" icon={<User className="w-6 h-6" />} onClick={() => openWindow('about')} />
         <DesktopIcon label="contact.bat" icon={<Mail className="w-6 h-6" />} onClick={() => openWindow('contact')} />
-        
         <DesktopIcon label="logs_dir" icon={<History className="w-6 h-6" />} onClick={() => openWindow('experience')} />
-        <DesktopIcon label="config.sys" icon={<SettingsIcon className="w-6 h-6" />} onClick={() => openWindow('settings')} />
         
+        {/* Column 2 */}
         <DesktopIcon label="assets_dir" icon={<FolderIcon className="w-6 h-6" />} onClick={() => openWindow('projects')} />
+        <DesktopIcon label="config.sys" icon={<SettingsIcon className="w-6 h-6" />} onClick={() => openWindow('settings')} />
+        <DesktopIcon label="stats.log" icon={<BarChart3 className="w-6 h-6" />} onClick={() => openWindow('stats')} />
       </div>
 
       {/* Desktop Pet - Byte the Cat */}
@@ -64,9 +67,6 @@ export default function Home() {
             </div>
 
             <div className="flex gap-4">
-              <button className="brutalist-button px-6 py-3 bg-[#ff00ff] dark:bg-[#ff2a6d] text-white">
-                Initialize Contact
-              </button>
               <button className="brutalist-button px-6 py-3 bg-white dark:bg-black">
                 Download_CV.exe
               </button>
@@ -122,6 +122,82 @@ export default function Home() {
           </div>
          </div>
       </Window>
+
+      {/* Stats Window */}
+      <Window id="stats" title="Analytics // Vercel_Metrics" icon={<BarChart3 className="w-3.5 h-3.5" />} defaultWidth={540} defaultHeight={520}>
+        <div className="p-8">
+          <header className="mb-6 flex items-start justify-between border-b-4 border-black dark:border-[#05d9e8] pb-6">
+            <div>
+              <h2 className="text-3xl heading font-black uppercase mb-1 flex items-center gap-2">
+                VERCEL<span className="text-[#05d9e8]">_</span>ANALYTICS
+              </h2>
+              <p className="text-[10px] font-bold opacity-60 uppercase tracking-widest text-[#ff00ff] dark:text-[#ff2a6d]">Project: vapor-portfolio-2026</p>
+            </div>
+            <div className="brutalist-button px-2 py-1 bg-black text-white dark:bg-[#05d9e8] dark:text-black text-[9px]">LIVE_MODE</div>
+          </header>
+
+          <div className="space-y-6">
+             {/* Connection Checklist */}
+             <div className="bg-[#00f0ff]/10 dark:bg-[#150833] border-2 border-dashed border-black dark:border-[#05d9e8] p-4">
+                <h3 className="text-[10px] font-bold uppercase mb-3 text-[#ff00ff] dark:text-[#ff2a6d]">Integration Status</h3>
+                <div className="space-y-2">
+                  {[
+                    { step: '1', label: 'Install @vercel/analytics', status: 'COMPLETE' },
+                    { step: '2', label: 'Add <Analytics /> to layout', status: 'COMPLETE' },
+                    { step: '3', label: 'Deploy & Visit Production', status: 'AWAITING_DEPLOY' },
+                  ].map((s, i) => (
+                    <div key={i} className="flex items-center justify-between text-[11px] font-mono">
+                      <div className="flex items-center gap-2">
+                        <span className={s.status === 'COMPLETE' ? "text-[#00ff00]" : "text-yellow-500"}>
+                          {s.status === 'COMPLETE' ? '[✓]' : '[ ]'}
+                        </span>
+                        <span className="opacity-80">STEP_{s.step}: {s.label}</span>
+                      </div>
+                      <span className={s.status === 'COMPLETE' ? "text-blue-500 font-bold" : "text-slate-500 font-bold"}>
+                        {s.status}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+             </div>
+
+             {/* Metrics Mock Grid */}
+             <div className="grid grid-cols-2 gap-4">
+                <div className="bg-white dark:bg-black border-2 border-black dark:border-[#05d9e8] p-4 shadow-[4px_4px_0_#ff00ff] dark:shadow-[4px_4px_0_#ff2a6d]">
+                  <span className="text-[10px] font-bold uppercase opacity-60">Visitors (Global)</span>
+                  <div className="text-3xl font-black tabular-nums mt-1 text-[#00f0ff] dark:text-[#05d9e8]">--</div>
+                  <p className="text-[9px] mt-2 opacity-40 font-bold uppercase tracking-tighter">Syncing with production...</p>
+                </div>
+                <div className="bg-white dark:bg-black border-2 border-black dark:border-[#05d9e8] p-4 shadow-[4px_4px_0_#00f0ff] dark:shadow-[4px_4px_0_#05d9e8]">
+                  <span className="text-[10px] font-bold uppercase opacity-60">Page Views</span>
+                  <div className="text-3xl font-black tabular-nums mt-1 text-[#ff00ff] dark:text-[#ff2a6d]">--</div>
+                  <p className="text-[9px] mt-2 opacity-40 font-bold uppercase tracking-tighter">Awaiting first hit...</p>
+                </div>
+             </div>
+
+             <div className="border-2 border-black dark:border-[#05d9e8] p-4 bg-slate-50 dark:bg-white/5">
+                <p className="text-[11px] leading-relaxed font-bold">
+                  <span className="text-[#ff00ff] dark:text-[#ff2a6d]">NOTICE:</span> Vercel Web Analytics data is strictly accessible via your project dashboard. 
+                  Once you deploy this build, visit your dashboard to see actual visitors, bounce rates, and top pages.
+                </p>
+                <div className="mt-4 flex gap-2">
+                  <button className="brutalist-button flex-1 py-1.5 text-[9px] bg-black text-white hover:bg-[#ff00ff] transition-all">
+                    GO TO DASHBOARD ↗
+                  </button>
+                  <button className="brutalist-button flex-1 py-1.5 text-[9px] bg-white dark:bg-black hover:bg-[#05d9e8] transition-all">
+                    RE-SYNC API
+                  </button>
+                </div>
+             </div>
+          </div>
+
+          <div className="mt-6 pt-6 border-t-2 border-dashed border-black dark:border-white/10 flex justify-between items-center text-[9px] font-mono opacity-40">
+             <span>ENGINE: CLOUD_SYNC_V3</span>
+             <span>ID: VERCEL_METRICS_00A</span>
+          </div>
+        </div>
+      </Window>
+
       {/* Contact Window */}
       <Window id="contact" title="Contact // Send_Message" icon={<Mail className="w-3.5 h-3.5" />} className="w-[480px]">
         <div className="p-8">
