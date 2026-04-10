@@ -4,6 +4,7 @@ import "./globals.css";
 import { WindowProvider } from "@/context/window-context";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import Script from "next/script";
 
 const inter = Inter({ subsets: ["latin"], variable: '--font-inter' });
 const spaceGrotesk = Space_Grotesk({ 
@@ -29,6 +30,12 @@ export default function RootLayout({
         </WindowProvider>
         <Analytics />
         <SpeedInsights />
+        {/* Umami Analytics */}
+        <Script 
+          src="https://cloud.umami.is/script.js" 
+          data-website-id="68a0413b-1279-4458-bd20-be613265bc5f"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );
