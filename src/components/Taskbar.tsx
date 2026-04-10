@@ -5,18 +5,16 @@ import { cn } from '@/lib/utils';
 import { useWindowManager, WindowId } from '@/context/window-context';
 import { 
   User, 
-  BookOpen, 
   Briefcase, 
   Settings, 
   LayoutGrid,
-  Command,
   Terminal
 } from 'lucide-react';
 
 export function Taskbar() {
   const { windows, openWindow, activeWindowId } = useWindowManager();
 
-  const dockItems: { id: WindowId; icon: any; label: string }[] = [
+  const dockItems: { id: WindowId; icon: React.ElementType; label: string }[] = [
     { id: 'about', icon: User, label: 'About' },
     { id: 'terminal', icon: Terminal, label: 'System' },
     { id: 'projects', icon: LayoutGrid, label: 'Assets' },

@@ -1,9 +1,8 @@
 'use client';
 
 import React from 'react';
-import { cn } from '@/lib/utils';
 import { useWindowManager } from '@/context/window-context';
-import { Sun, Moon, Search } from 'lucide-react';
+import { Sun, Moon } from 'lucide-react';
 import { useClock } from '@/hooks/use-clock';
 
 export function Headbar() {
