@@ -3,27 +3,22 @@
 import { Headbar } from "@/components/Headbar";
 import { Taskbar } from "@/components/Taskbar";
 import { Window } from "@/components/Window";
+import { Terminal as TerminalComponent } from "@/components/Terminal";
 import { DesktopIcon } from "@/components/DesktopIcon";
 import { useWindowManager } from "@/context/window-context";
 import { 
   User, 
-  FileText, 
   FolderIcon, 
   Mail, 
   History, 
   Settings as SettingsIcon,
-  Gamepad2,
-  Image as ImageIcon,
-  Command,
   LayoutGrid,
   Terminal,
   Code
 } from "lucide-react";
 
 export default function Home() {
-  const { openWindow, background, setBackground } = useWindowManager();
-
-  const isColor = background.startsWith('#');
+  const { openWindow } = useWindowManager();
 
   return (
     <main 
@@ -34,7 +29,8 @@ export default function Home() {
       {/* Desktop Icons - Left aligned */}
       <div className="absolute top-20 left-6 flex flex-col items-center gap-6 z-10 w-24">
         <DesktopIcon label="profile.exe" icon={<User className="w-6 h-6" />} onClick={() => openWindow('about')} />
-        <DesktopIcon label="system_logs" icon={<Terminal className="w-6 h-6" />} onClick={() => openWindow('experience')} />
+        <DesktopIcon label="terminal.app" icon={<Terminal className="w-6 h-6" />} onClick={() => openWindow('terminal')} />
+        <DesktopIcon label="logs_dir" icon={<History className="w-6 h-6" />} onClick={() => openWindow('experience')} />
         <DesktopIcon label="assets_dir" icon={<FolderIcon className="w-6 h-6" />} onClick={() => openWindow('projects')} />
         
         <div className="w-12 h-[2px] bg-black dark:bg-[#05d9e8]" />
@@ -43,7 +39,7 @@ export default function Home() {
         <DesktopIcon label="config.sys" icon={<SettingsIcon className="w-6 h-6" />} onClick={() => openWindow('settings')} />
       </div>
 
-      {/* About Window - Neo-brutalist Content */}
+      {/* About Window */}
       <Window id="about" title="Sys_Profile // John.Doe" icon={<User className="w-3.5 h-3.5" />}>
         <div className="px-8 py-10 max-w-2xl mx-auto">
           <header className="mb-10 border-b-4 border-black dark:border-[#05d9e8] pb-8">
@@ -75,28 +71,28 @@ export default function Home() {
         </div>
       </Window>
 
-      {/* Terminal / Experience Window */}
-      <Window id="experience" title="Terminal // System_Logs" icon={<Terminal className="w-3.5 h-3.5" />} className="w-[600px]">
-        <div className="p-6 bg-black text-[#00ff00] h-full font-mono text-xs">
-          <p className="mb-4 text-[#ff00ff]">{'SYS_LOGS > Querying experience database...'}</p>
-          <div className="space-y-4">
+      {/* Real Terminal Window */}
+      <Window id="terminal" title="Terminal // Command_Shell" icon={<Terminal className="w-3.5 h-3.5" />} className="w-[600px] h-[400px]">
+        <TerminalComponent />
+      </Window>
+
+      {/* Experience Window */}
+      <Window id="experience" title="Directory // System_Logs" icon={<History className="w-3.5 h-3.5" />} className="w-[500px]">
+        <div className="p-8">
+          <h2 className="text-2xl font-black uppercase mb-8 border-l-8 border-[#ff2a6d] pl-4">Work_History</h2>
+          <div className="space-y-8">
             {[
               { year: '2024 - PRESENT', role: 'STAFF ENGINEER', company: 'CYBER-CORP' },
               { year: '2022 - 2024', role: 'UI RESEARCHER', company: 'NEON SYSTEMS' },
-              { year: '2020 - 2022', role: 'DEV INTERN', company: 'LEGACY.NET' },
+              { year: '2019 - 2022', role: 'DEV INTERN', company: 'LEGACY.NET' },
             ].map((exp, i) => (
-              <div key={i} className="flex gap-4">
-                <span className="w-32 opacity-70">[{exp.year}]</span>
-                <div>
-                  <span className="font-bold text-white">{exp.role}</span> @ <span className="text-[#00ffff]">{exp.company}</span>
-                </div>
+              <div key={i} className="border-2 border-black dark:border-[#05d9e8] p-4 bg-white dark:bg-black/40 hover:bg-[#00f0ff] dark:hover:bg-[#ff2a6d] hover:text-white transition-colors">
+                <span className="text-[10px] font-bold opacity-60">[{exp.year}]</span>
+                <h3 className="font-black text-lg uppercase leading-tight">{exp.role}</h3>
+                <p className="font-bold text-sm tracking-tighter opacity-80">{exp.company}</p>
               </div>
             ))}
           </div>
-          <p className="mt-6 flex items-center gap-2">
-            <span>root@vapor_os:~/$</span>
-            <span className="w-2 h-4 bg-[#00ff00] animate-pulse inline-block" />
-          </p>
         </div>
       </Window>
 
@@ -120,7 +116,11 @@ export default function Home() {
       <Window id="settings" title="Sys_Config.exe" icon={<SettingsIcon className="w-3.5 h-3.5" />}>
          <div className="p-8">
           <h2 className="text-xl font-bold uppercase mb-6 bg-black text-white dark:bg-[#05d9e8] dark:text-black inline-block px-2">Display Module</h2>
-          <p className="text-sm border-l-4 border-[#ff00ff] pl-4 mb-4">Themes are locked to SYSTEM PREFERENCES in current build v.2026. Use the top headbar to toggle DAY / NIGHT cycles.</p>
+          <p className="text-sm border-l-4 border-[#ff00ff] pl-4 mb-4 font-bold">Themes are synchronized with System Clock. Use Top_Headbar for manual Day/Night override.</p>
+          <div className="mt-8 pt-8 border-t-2 border-dashed border-black dark:border-white/20">
+            <p className="text-[10px] font-mono opacity-60 uppercase tracking-tighter">OS_Core_Status: Stable</p>
+            <p className="text-[10px] font-mono opacity-60 uppercase tracking-tighter text-[#ff00ff]">Vapor_Engine: Active</p>
+          </div>
          </div>
       </Window>
 
