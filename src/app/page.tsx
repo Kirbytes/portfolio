@@ -1,10 +1,11 @@
 'use client';
 
+import { useRef } from "react";
 import { Headbar } from "@/components/Headbar";
 import { Taskbar } from "@/components/Taskbar";
 import { Window } from "@/components/Window";
-import { Terminal as TerminalComponent } from "@/components/Terminal";
 import { DesktopIcon } from "@/components/DesktopIcon";
+import { DesktopPet } from "@/components/DesktopPet";
 import { useWindowManager } from "@/context/window-context";
 import { 
   User, 
@@ -13,31 +14,34 @@ import {
   History, 
   Settings as SettingsIcon,
   LayoutGrid,
-  Terminal,
   Code
 } from "lucide-react";
 
 export default function Home() {
   const { openWindow } = useWindowManager();
+  const desktopRef = useRef<HTMLDivElement>(null);
 
   return (
     <main 
+      ref={desktopRef}
       className="relative h-screen w-screen overflow-hidden transition-all duration-700 bg-transparent" 
     >
       <Headbar />
       
-      {/* Desktop Icons - Left aligned */}
-      <div className="absolute top-20 left-6 flex flex-col items-center gap-6 z-10 w-24">
+      {/* Desktop Icons - Two columns, left aligned */}
+      <div className="absolute top-20 left-6 grid grid-cols-2 gap-x-4 gap-y-4 z-10">
+        {/* Column 1 */}
         <DesktopIcon label="profile.exe" icon={<User className="w-6 h-6" />} onClick={() => openWindow('about')} />
-        <DesktopIcon label="terminal.app" icon={<Terminal className="w-6 h-6" />} onClick={() => openWindow('terminal')} />
-        <DesktopIcon label="logs_dir" icon={<History className="w-6 h-6" />} onClick={() => openWindow('experience')} />
-        <DesktopIcon label="assets_dir" icon={<FolderIcon className="w-6 h-6" />} onClick={() => openWindow('projects')} />
-        
-        <div className="w-12 h-[2px] bg-black dark:bg-[#05d9e8]" />
-        
         <DesktopIcon label="contact.bat" icon={<Mail className="w-6 h-6" />} onClick={() => openWindow('contact')} />
+        
+        <DesktopIcon label="logs_dir" icon={<History className="w-6 h-6" />} onClick={() => openWindow('experience')} />
         <DesktopIcon label="config.sys" icon={<SettingsIcon className="w-6 h-6" />} onClick={() => openWindow('settings')} />
+        
+        <DesktopIcon label="assets_dir" icon={<FolderIcon className="w-6 h-6" />} onClick={() => openWindow('projects')} />
       </div>
+
+      {/* Desktop Pet - Byte the Cat */}
+      <DesktopPet containerRef={desktopRef} />
 
       {/* About Window */}
       <Window id="about" title="Sys_Profile // John.Doe" icon={<User className="w-3.5 h-3.5" />}>
@@ -69,11 +73,6 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </Window>
-
-      {/* Real Terminal Window */}
-      <Window id="terminal" title="Terminal // Command_Shell" icon={<Terminal className="w-3.5 h-3.5" />} className="w-[600px] h-[400px]">
-        <TerminalComponent />
       </Window>
 
       {/* Experience Window */}
@@ -122,6 +121,81 @@ export default function Home() {
             <p className="text-[10px] font-mono opacity-60 uppercase tracking-tighter text-[#ff00ff]">Vapor_Engine: Active</p>
           </div>
          </div>
+      </Window>
+      {/* Contact Window */}
+      <Window id="contact" title="Contact // Send_Message" icon={<Mail className="w-3.5 h-3.5" />} className="w-[480px]">
+        <div className="p-8">
+          <header className="mb-8 border-b-4 border-black dark:border-[#05d9e8] pb-6">
+            <h2 className="text-3xl heading font-black uppercase mb-3">Contact</h2>
+            <p className="text-sm font-bold opacity-70 leading-relaxed">
+              Send a message directly for project inquiries, collaborations, or just to say hello.
+            </p>
+          </header>
+
+          <p className="text-xs font-bold uppercase tracking-widest text-[#ff00ff] dark:text-[#05d9e8] mb-6">
+            Fill in your details and send your message directly.
+          </p>
+
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              // TODO: wire up to your email service
+              alert('Message sent! (Demo mode — wire up your email address later.)');
+            }}
+            className="space-y-5"
+          >
+            {/* Name */}
+            <div>
+              <label className="block text-[10px] font-bold uppercase tracking-widest mb-2">Name</label>
+              <input
+                type="text"
+                placeholder="Your name"
+                required
+                className="w-full px-4 py-3 bg-white dark:bg-black border-2 border-black dark:border-[#05d9e8] text-sm font-bold outline-none focus:shadow-[3px_3px_0_#ff00ff] dark:focus:shadow-[3px_3px_0_#ff2a6d] transition-shadow placeholder:opacity-40"
+              />
+            </div>
+
+            {/* Email */}
+            <div>
+              <label className="block text-[10px] font-bold uppercase tracking-widest mb-2">Email</label>
+              <input
+                type="email"
+                placeholder="you@example.com"
+                required
+                className="w-full px-4 py-3 bg-white dark:bg-black border-2 border-black dark:border-[#05d9e8] text-sm font-bold outline-none focus:shadow-[3px_3px_0_#ff00ff] dark:focus:shadow-[3px_3px_0_#ff2a6d] transition-shadow placeholder:opacity-40"
+              />
+            </div>
+
+            {/* Subject */}
+            <div>
+              <label className="block text-[10px] font-bold uppercase tracking-widest mb-2">Subject</label>
+              <input
+                type="text"
+                placeholder="Project inquiry"
+                required
+                className="w-full px-4 py-3 bg-white dark:bg-black border-2 border-black dark:border-[#05d9e8] text-sm font-bold outline-none focus:shadow-[3px_3px_0_#ff00ff] dark:focus:shadow-[3px_3px_0_#ff2a6d] transition-shadow placeholder:opacity-40"
+              />
+            </div>
+
+            {/* Message */}
+            <div>
+              <label className="block text-[10px] font-bold uppercase tracking-widest mb-2">Message</label>
+              <textarea
+                rows={5}
+                placeholder="Write your message here..."
+                required
+                className="w-full px-4 py-3 bg-white dark:bg-black border-2 border-black dark:border-[#05d9e8] text-sm font-bold outline-none resize-none focus:shadow-[3px_3px_0_#ff00ff] dark:focus:shadow-[3px_3px_0_#ff2a6d] transition-shadow placeholder:opacity-40"
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="brutalist-button w-full px-6 py-4 bg-[#ff00ff] dark:bg-[#ff2a6d] text-white text-sm tracking-widest hover:bg-black dark:hover:bg-[#05d9e8] dark:hover:text-black transition-colors"
+            >
+              SEND MESSAGE →
+            </button>
+          </form>
+        </div>
       </Window>
 
       <Taskbar />
