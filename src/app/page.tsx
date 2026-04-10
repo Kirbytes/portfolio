@@ -152,9 +152,6 @@ export default function Home() {
               </h2>
               <p className="text-[10px] font-bold opacity-60 uppercase tracking-widest text-[#ff00ff] dark:text-[#05d9e8]">Site_ID: 68a0413b-1279-4458-bd20-be613265bc5f</p>
             </div>
-            <div className={`brutalist-button px-2 py-1 ${metrics.loading ? 'bg-yellow-500' : 'bg-[#00ff00]'} text-black text-[9px] font-bold animate-pulse`}>
-              {metrics.loading ? 'SYNCING...' : 'LIVE_DATA'}
-            </div>
           </header>
 
           <div className="space-y-6">
