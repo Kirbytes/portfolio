@@ -1,0 +1,100 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --background: #fdfdfd;
+  --foreground: #1a1a1a;
+  --card: #ffffff;
+  --accent-cyan: #00f0ff;
+  --accent-magenta: #ff00ff;
+  --window-border: #1a1a1a;
+  --shadow-color: #1a1a1a;
+  --grid-color: rgba(26, 26, 26, 0.05);
+}
+
+.dark {
+  --background: #0d0221;
+  --foreground: #f8fafc;
+  --card: #150833;
+  --accent-cyan: #05d9e8;
+  --accent-magenta: #ff2a6d;
+  --window-border: #05d9e8;
+  --shadow-color: #ff2a6d;
+  --grid-color: rgba(5, 217, 232, 0.1);
+}
+
+body {
+  color: var(--foreground);
+  background-color: var(--background);
+  font-family: var(--font-inter), system-ui, sans-serif;
+  overflow: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  
+  /* Minimalist Vaporwave Grid */
+  background-image: 
+    linear-gradient(var(--grid-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+  background-size: 40px 40px;
+  background-position: center center;
+}
+
+h1, h2, h3, h4, .heading {
+  font-family: var(--font-heading), sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* Neo-brutalist Window Styling */
+.window-glass {
+  background: var(--card);
+  border: 3px solid var(--window-border);
+  box-shadow: 6px 6px 0px var(--shadow-color);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.window-glass:active {
+  box-shadow: 2px 2px 0px var(--shadow-color);
+  transform: translate(4px, 4px);
+}
+
+/* Specific elements needing a brutalist touch */
+.brutalist-button {
+  background: var(--card);
+  border: 2px solid var(--window-border);
+  box-shadow: 2px 2px 0px var(--shadow-color);
+  font-weight: bold;
+  text-transform: uppercase;
+  transition: all 0.1s ease;
+}
+
+.brutalist-button:active {
+  box-shadow: 0px 0px 0px var(--shadow-color);
+  transform: translate(2px, 2px);
+}
+
+/* Taskbar styling */
+.taskbar-glass {
+  background: var(--card);
+  border: 2px solid var(--window-border);
+  box-shadow: 4px 4px 0px var(--shadow-color);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+  border-left: 2px solid var(--window-border);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--accent-cyan);
+  border: 2px solid var(--window-border);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-magenta);
+}
