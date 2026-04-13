@@ -17,8 +17,10 @@ import {
   LayoutGrid,
   Code,
   BarChart3,
-  ExternalLink
+  ExternalLink,
+  Shuffle
 } from "lucide-react";
+import { DitheredBackground } from "@/components/DitheredBackground";
 
 export default function Home() {
   const { 
@@ -31,10 +33,35 @@ export default function Home() {
   } = useWindowManager();
   const desktopRef = useRef<HTMLDivElement>(null);
   const [metrics, setMetrics] = useState({ visitors: 0, pageviews: 0, loading: true });
+  const isDither = background?.startsWith('dither:');
+  
+  const defaultDitherConfig = {
+    bg: { h: 228, s: 89, l: 45 },
+    orbs: [
+      { x: 10, y: 10, c: { h: 184, s: 100, l: 80 }, in: 30, out: 80 },
+      { x: 15, y: 85, c: { h: 195, s: 100, l: 65 }, in: 20, out: 60 },
+      { x: 55, y: 85, c: { h: 315, s: 35, l: 35 }, in: 20, out: 70 },
+      { x: 80, y: 40, c: { h: 210, s: 100, l: 60 }, in: 10, out: 60 },
+      { x: 90, y: 90, c: { h: 250, s: 45, l: 30 }, in: 10, out: 55 }
+    ]
+  };
+  const defaultDither = `dither:${JSON.stringify(defaultDitherConfig)}`;
+
+  const getMeshCss = (configStr: string) => {
+    try {
+      const config = JSON.parse(configStr.replace('dither:', ''));
+      return {
+        backgroundColor: `hsla(${config.bg.h},${config.bg.s}%,${config.bg.l}%,1)`,
+        backgroundImage: config.orbs.map((orb: any) => `radial-gradient(circle at ${orb.x}% ${orb.y}%, hsla(${orb.c.h},${orb.c.s}%,${orb.c.l}%,1) ${orb.in}%, transparent ${orb.out}%)`).join(','),
+        backgroundBlendMode: 'normal' as const
+      };
+    } catch {
+      return { backgroundColor: 'transparent' };
+    }
+  };
 
   const backgrounds = [
-    { name: 'Orange', value: '#ea580c', type: 'color' },
-    { name: 'Blue', value: '#2563eb', type: 'color' },
+    { name: 'Dither Mesh', value: isDither ? background : defaultDither, type: 'dither' },
     { name: 'Fields', value: '/wallpapers/green_wheat_fields_auvers_2013.122.1.jpg', type: 'image' },
     { name: 'Starry', value: '/wallpapers/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg', type: 'image' },
     { name: 'Blossom', value: '/wallpapers/vangoghmuseum-s0176V1962-800.jpg', type: 'image' },
@@ -89,17 +116,26 @@ export default function Home() {
         </filter>
       </svg>
 
+      {/* Dynamic Native Dither Layer */}
+      {isDither && (
+        <div style={{ filter: `brightness(${100 + brightness}%) contrast(${100 + contrast}%) saturate(${100 + saturation}%)` }} className="absolute inset-0 pointer-events-none -z-10">
+          <DitheredBackground configStr={isDither ? background : defaultDither} />
+        </div>
+      )}
+
       {/* Structured Wallpaper Layer */}
-      <div 
-        className="absolute inset-0 transition-all duration-700"
-        style={{ 
-          backgroundColor: isImage ? 'transparent' : background,
-          backgroundImage: isImage ? `url(${background})` : 'none',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          filter: `brightness(${100 + brightness}%) contrast(${100 + contrast}%) saturate(${100 + saturation}%) ${pixelSize > 0 ? 'url(#pixelate)' : ''}`
-        }}
-      />
+      {!isDither && (
+        <div 
+          className="absolute inset-0 transition-all duration-700 -z-10"
+          style={{ 
+            backgroundColor: isImage ? 'transparent' : background,
+            backgroundImage: isImage ? `url(${background})` : 'none',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            filter: `brightness(${100 + brightness}%) contrast(${100 + contrast}%) saturate(${100 + saturation}%) ${pixelSize > 0 ? 'url(#pixelate)' : ''}`
+          }}
+        />
+      )}
 
       <Headbar />
       
@@ -190,26 +226,56 @@ export default function Home() {
           <section>
             <h2 className="text-sm font-semibold mb-4 uppercase tracking-wider text-text-secondary">Wallpaper Selection</h2>
             <div className="grid grid-cols-3 gap-3">
-              {backgrounds.map((bg) => (
-                <button
-                  key={bg.value}
-                  onClick={() => handleBgChange(bg)}
-                  className={cn(
-                    "flex flex-col items-center gap-2 p-2 rounded-lg border transition-all",
-                    background === bg.value ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20" : "border-bg-fourth hover:border-text-secondary"
-                  )}
-                >
-                  <div 
-                    className="w-full aspect-video rounded-md" 
-                    style={{ 
-                      backgroundColor: bg.type === 'color' ? bg.value : 'transparent',
-                      backgroundImage: bg.type === 'image' ? `url(${bg.value})` : 'none',
-                      backgroundSize: 'cover'
-                    }} 
-                  />
-                  <span className="text-[10px] font-medium">{bg.name}</span>
-                </button>
-              ))}
+              {backgrounds.map((bg) => {
+                const isSelected = bg.type === 'dither' ? isDither : background === bg.value;
+                return (
+                  <button
+                    key={bg.type === 'dither' ? 'dither' : bg.value}
+                    onClick={() => handleBgChange(bg)}
+                    className={cn(
+                      "group relative flex flex-col items-center gap-2 p-2 rounded-lg border transition-all",
+                      isSelected ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20" : "border-bg-fourth hover:border-text-secondary"
+                    )}
+                  >
+                    <div 
+                      className="w-full aspect-video rounded-md overflow-hidden relative" 
+                      style={{ 
+                        ...(bg.type === 'color' ? { backgroundColor: bg.value } : {}),
+                        ...(bg.type === 'image' ? { backgroundImage: `url(${bg.value})` } : {}),
+                        ...(bg.type === 'dither' ? getMeshCss(isSelected ? background : defaultDither) : {}),
+                        backgroundSize: 'cover'
+                      }} 
+                    >
+                      {bg.type === 'dither' && (
+                        <div 
+                          className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            const generateMeshConfig = () => {
+                              const rH = () => Math.floor(Math.random() * 360);
+                              const bg = { h: rH(), s: 60 + Math.floor(Math.random()*30), l: 80 + Math.floor(Math.random()*10) };
+                              
+                              const orbs = Array.from({ length: 5 }).map(() => ({
+                                x: Math.floor(Math.random() * 100),
+                                y: Math.floor(Math.random() * 100),
+                                c: { h: rH(), s: 70 + Math.floor(Math.random()*25), l: 70 + Math.floor(Math.random()*25) },
+                                in: Math.floor(Math.random() * 10) + 5,
+                                out: Math.floor(Math.random() * 40) + 40
+                              }));
+                              
+                              return `dither:${JSON.stringify({ bg, orbs })}`;
+                            };
+                            handleBgChange({ ...bg, value: generateMeshConfig() });
+                          }}
+                        >
+                          <Shuffle className="w-5 h-5 text-white" />
+                        </div>
+                      )}
+                    </div>
+                    <span className="text-[10px] font-medium">{bg.name}</span>
+                  </button>
+                );
+              })}
             </div>
           </section>
 

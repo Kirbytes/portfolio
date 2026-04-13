@@ -52,7 +52,7 @@ export const WindowProvider = ({ children }: { children: ReactNode }) => {
   const [windows, setWindows] = useState<Record<WindowId, WindowState>>(INITIAL_WINDOWS_STATE);
   const [activeWindowId, setActiveWindowId] = useState<WindowId | null>(null);
   const [maxZIndex, setMaxZIndex] = useState(10);
-  const [background, setBackground] = useState('#ea580c');
+  const [background, setBackground] = useState('dither:{"bg":{"h":228,"s":89,"l":45},"orbs":[{"x":10,"y":10,"c":{"h":184,"s":100,"l":80},"in":30,"out":80},{"x":15,"y":85,"c":{"h":195,"s":100,"l":65},"in":20,"out":60},{"x":55,"y":85,"c":{"h":315,"s":35,"l":35},"in":20,"out":70},{"x":80,"y":40,"c":{"h":210,"s":100,"l":60},"in":10,"out":60},{"x":90,"y":90,"c":{"h":250,"s":45,"l":30},"in":10,"out":55}]}');
   const [brightness, setBrightness] = useState(0); // Offset from 100
   const [contrast, setContrast] = useState(0); // Offset from 100
   const [saturation, setSaturation] = useState(0); // Offset from 100
