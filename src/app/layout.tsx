@@ -1,16 +1,13 @@
 import type { Metadata } from "next";
-import { Inter, Space_Grotesk } from "next/font/google";
+import { DM_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { WindowProvider } from "@/context/window-context";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import Script from "next/script";
 
-const inter = Inter({ subsets: ["latin"], variable: '--font-inter' });
-const spaceGrotesk = Space_Grotesk({ 
-  subsets: ["latin"],
-  variable: '--font-heading'
-});
+const dmSans = DM_Sans({ subsets: ["latin"], variable: '--font-sans' });
+const jetBrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: '--font-mono' });
 
 export const metadata: Metadata = {
   title: "Dev Portfolio | Modern Workspace",
@@ -24,7 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${spaceGrotesk.variable} font-sans antialiased text-slate-900 dark:text-slate-100`}>
+      <body className={`${dmSans.variable} ${jetBrainsMono.variable} font-sans antialiased`}>
         <WindowProvider>
           {children}
         </WindowProvider>

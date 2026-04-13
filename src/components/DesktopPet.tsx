@@ -234,7 +234,7 @@ export function DesktopPet({ containerRef }: DesktopPetProps) {
           </div>
 
           {!isChatOpen && (
-            <div className="absolute -top-10 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-white dark:bg-[#150833] text-black dark:text-white text-[9px] px-2 py-1 rounded border-2 border-black dark:border-[#05d9e8] whitespace-nowrap font-bold shadow-[2px_2px_0_#ff00ff]">
+            <div className="absolute -top-10 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-secondary text-primary text-[10px] px-2 py-1 rounded-md border border-bg-fourth whitespace-nowrap font-medium shadow-sm">
               Meow? 🐾
             </div>
           )}
@@ -254,34 +254,40 @@ export function DesktopPet({ containerRef }: DesktopPetProps) {
               top: Math.max(50, pos.y - 320),
             }}
           >
-            <div className="w-[340px] h-[300px] bg-black border-3 border-[#05d9e8] dark:border-[#ff2a6d] shadow-[6px_6px_0_#ff00ff] dark:shadow-[6px_6px_0_#05d9e8] flex flex-col overflow-hidden">
-              <div className="h-8 bg-[#05d9e8] dark:bg-[#ff2a6d] flex items-center justify-between px-3 select-none">
-                <span className="text-[10px] font-bold text-black uppercase tracking-wider">🐱 Byte: The Pixel Protector</span>
-                <button
-                  onClick={(e) => { e.stopPropagation(); setIsChatOpen(false); }}
-                  className="w-5 h-5 bg-black text-white flex items-center justify-center hover:bg-[#ff00ff] transition-colors"
-                >
-                  <X className="w-3 h-3" />
-                </button>
+            <div className="w-[440px] h-[320px] bg-[#1a1b26] border border-[#292e42] shadow-2xl rounded-xl flex flex-col overflow-hidden">
+              <div className="h-10 bg-[#16161e] border-b border-[#292e42] flex items-center px-4 select-none cursor-move">
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={(e) => { e.stopPropagation(); setIsChatOpen(false); }}
+                    className="w-3 h-3 bg-red-500 hover:bg-red-600 rounded-full flex items-center justify-center group"
+                  >
+                    <X className="w-2 h-2 opacity-0 group-hover:opacity-100 text-[#1a1b26] transition-opacity" />
+                  </button>
+                  <div className="w-3 h-3 bg-yellow-500 rounded-full" />
+                  <div className="w-3 h-3 bg-green-500 rounded-full" />
+                </div>
+                <div className="flex-1 text-center pr-12">
+                  <span className="text-xs font-mono text-zinc-400">user@workspace:~</span>
+                </div>
               </div>
 
-              <div className="flex-1 overflow-y-auto p-4 text-[#00ff00] font-mono text-[11px] leading-relaxed selection:bg-[#ff00ff] selection:text-white scrollbar-custom">
+              <div className="flex-1 overflow-y-auto p-4 text-[#c0caf5] font-mono text-[12px] leading-relaxed selection:bg-[#33467c] selection:text-white scrollbar-custom">
                 {output.map((line, i) => (
-                  <div key={i} className={line.startsWith('>') ? 'text-[#ff00ff]' : line.startsWith('🐱') ? 'text-[#05d9e8]' : ''}>
+                  <div key={i} className={line.startsWith('>') ? 'text-[#7aa2f7]' : line.startsWith('🐱') ? 'text-[#9ece6a]' : ''}>
                     {line || '\u00A0'}
                   </div>
                 ))}
                 <div ref={bottomRef} />
               </div>
 
-              <form onSubmit={handleCommand} className="flex items-center gap-2 px-3 py-2 border-t border-[#05d9e8]/30">
-                <span className="text-[#ff00ff] text-[10px] font-bold">🐾</span>
+              <form onSubmit={handleCommand} className="flex items-center gap-2 px-4 py-2 border-t border-[#292e42] bg-[#16161e]">
+                <span className="text-[#bb9af7] text-xs font-mono font-bold">$</span>
                 <input
                   type="text"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  placeholder="say something to byte..."
-                  className="bg-transparent border-none outline-none flex-1 text-[#00ff00] text-[11px] font-mono caret-[#ff00ff] placeholder:text-[#00ff00]/30"
+                  placeholder="type a command (try 'help')..."
+                  className="bg-transparent border-none outline-none flex-1 text-[#c0caf5] text-[12px] font-mono caret-[#bb9af7] placeholder:text-zinc-600"
                   autoFocus
                 />
               </form>

@@ -12,21 +12,20 @@ interface DesktopIconProps {
 
 export function DesktopIcon({ label, icon, onClick, className }: DesktopIconProps) {
   return (
-    <div 
+    <button 
+      type="button"
       onClick={onClick}
       className={cn(
-        "flex flex-col items-center gap-2 cursor-pointer group w-24 p-2 transition-all active:scale-95",
+        "group flex flex-col items-center cursor-pointer text-center w-[92px] gap-1 px-2 py-2 hover:bg-[var(--desktop-file-hover)] rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 transition-colors",
         className
       )}
     >
-      <div className="w-14 h-14 flex items-center justify-center bg-white dark:bg-[#150833] border-2 border-black dark:border-[#05d9e8] shadow-[4px_4px_0_#1a1a1a] dark:shadow-[4px_4px_0_#ff2a6d] group-hover:shadow-[2px_2px_0_#1a1a1a] group-hover:translate-x-[2px] group-hover:translate-y-[2px] transition-all">
-        <div className="text-black dark:text-white">
-          {icon}
-        </div>
+      <div className="w-12 h-12 flex items-center justify-center text-white drop-shadow-md">
+        {icon}
       </div>
-      <span className="text-[10px] font-bold text-black dark:text-white bg-white dark:bg-[#150833] border-2 border-transparent group-hover:border-black dark:group-hover:border-[#05d9e8] px-1 text-center leading-tight uppercase tracking-wide">
+      <span className="max-w-full break-words font-medium leading-tight text-white drop-shadow-md text-[12px] px-1 rounded-sm">
         {label}
       </span>
-    </div>
+    </button>
   );
 }

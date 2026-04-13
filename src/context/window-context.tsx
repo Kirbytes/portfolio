@@ -16,8 +16,16 @@ interface WindowManagerContextType {
   windows: Record<WindowId, WindowState>;
   activeWindowId: WindowId | null;
   background: string;
+  brightness: number;
+  contrast: number;
+  saturation: number;
+  pixelSize: number;
   isDarkMode: boolean;
   setBackground: (bg: string) => void;
+  setBrightness: (val: number) => void;
+  setContrast: (val: number) => void;
+  setSaturation: (val: number) => void;
+  setPixelSize: (val: number) => void;
   toggleDarkMode: () => void;
   openWindow: (id: WindowId) => void;
   closeWindow: (id: WindowId) => void;
@@ -44,7 +52,11 @@ export const WindowProvider = ({ children }: { children: ReactNode }) => {
   const [windows, setWindows] = useState<Record<WindowId, WindowState>>(INITIAL_WINDOWS_STATE);
   const [activeWindowId, setActiveWindowId] = useState<WindowId | null>(null);
   const [maxZIndex, setMaxZIndex] = useState(10);
-  const [background, setBackground] = useState('#f8fafc');
+  const [background, setBackground] = useState('#ea580c');
+  const [brightness, setBrightness] = useState(0); // Offset from 100
+  const [contrast, setContrast] = useState(0); // Offset from 100
+  const [saturation, setSaturation] = useState(0); // Offset from 100
+  const [pixelSize, setPixelSize] = useState(0);
   const [isDarkMode, setIsDarkMode] = useState(false);
 
   const toggleDarkMode = useCallback(() => {
@@ -108,8 +120,16 @@ export const WindowProvider = ({ children }: { children: ReactNode }) => {
         windows,
         activeWindowId,
         background,
+        brightness,
+        contrast,
+        saturation,
+        pixelSize,
         isDarkMode,
         setBackground,
+        setBrightness,
+        setContrast,
+        setSaturation,
+        setPixelSize,
         toggleDarkMode,
         openWindow,
         closeWindow,

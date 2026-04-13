@@ -3,98 +3,88 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  --background: #fdfdfd;
-  --foreground: #1a1a1a;
-  --card: #ffffff;
-  --accent-cyan: #00f0ff;
-  --accent-magenta: #ff00ff;
-  --window-border: #1a1a1a;
-  --shadow-color: #1a1a1a;
-  --grid-color: rgba(26, 26, 26, 0.05);
+  --bg-primary: #ffffff;
+  --bg-secondary: #f4f4f5;
+  --bg-third: #e4e4e7;
+  --bg-fourth: #d4d4d8;
+  --text-primary: #18181b;
+  --text-secondary: #71717a;
+  --text-accent: #f59e0b;
+  --desktop-file-label-text: #ffffff;
+  --desktop-file-hover: rgba(255, 255, 255, 0.2);
+  --button-secondary: #e4e4e7;
+  --desktop-bg: #ea580c; /* Orange tint like the reference */
 }
 
 .dark {
-  --background: #0d0221;
-  --foreground: #f8fafc;
-  --card: #150833;
-  --accent-cyan: #05d9e8;
-  --accent-magenta: #ff2a6d;
-  --window-border: #05d9e8;
-  --shadow-color: #ff2a6d;
-  --grid-color: rgba(5, 217, 232, 0.1);
+  --bg-primary: #09090b;
+  --bg-secondary: #18181b;
+  --bg-third: #27272a;
+  --bg-fourth: #3f3f46;
+  --text-primary: #fafafa;
+  --text-secondary: #a1a1aa;
+  --text-accent: #f59e0b;
+  --button-secondary: #27272a;
+  --desktop-bg: #822e03;
 }
 
 body {
-  color: var(--foreground);
-  background-color: var(--background);
-  font-family: var(--font-inter), system-ui, sans-serif;
+  color: var(--text-primary);
+  background-color: var(--desktop-bg);
+  font-family: var(--font-sans), system-ui, sans-serif;
   overflow: hidden;
   transition: background-color 0.3s ease, color 0.3s ease;
-  
-  /* Minimalist Vaporwave Grid */
-  background-image: 
-    linear-gradient(var(--grid-color) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
-  background-size: 40px 40px;
-  background-position: center center;
 }
 
 h1, h2, h3, h4, .heading {
-  font-family: var(--font-heading), sans-serif;
   font-weight: 700;
   letter-spacing: -0.02em;
 }
 
-/* Neo-brutalist Window Styling */
+/* Base structural classes */
 .window-glass {
-  background: var(--card);
-  border: 3px solid var(--window-border);
-  box-shadow: 6px 6px 0px var(--shadow-color);
-  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  background: var(--bg-primary);
+  border: 1px solid var(--bg-fourth);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+  overflow: hidden;
 }
 
-.window-glass:active {
-  box-shadow: 2px 2px 0px var(--shadow-color);
-  transform: translate(4px, 4px);
+.dark .window-glass {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
 }
 
-/* Specific elements needing a brutalist touch */
-.brutalist-button {
-  background: var(--card);
-  border: 2px solid var(--window-border);
-  box-shadow: 2px 2px 0px var(--shadow-color);
-  font-weight: bold;
-  text-transform: uppercase;
-  transition: all 0.1s ease;
-}
-
-.brutalist-button:active {
-  box-shadow: 0px 0px 0px var(--shadow-color);
-  transform: translate(2px, 2px);
-}
-
-/* Taskbar styling */
 .taskbar-glass {
-  background: var(--card);
-  border: 2px solid var(--window-border);
-  box-shadow: 4px 4px 0px var(--shadow-color);
+  background: var(--bg-primary);
+  border: 1px solid var(--bg-fourth);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* Custom scrollbar */
+/* Custom scrollbar matching sleek design */
 ::-webkit-scrollbar {
-  width: 12px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--background);
-  border-left: 2px solid var(--window-border);
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--accent-cyan);
-  border: 2px solid var(--window-border);
+  background: var(--bg-fourth);
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--accent-magenta);
+  background: var(--text-secondary);
 }
+
+/* Utility classes mapped from reference */
+.bg-primary { background-color: var(--bg-primary); }
+.bg-secondary { background-color: var(--bg-secondary); }
+.bg-third { background-color: var(--bg-third); }
+.border-bg-fourth { border-color: var(--bg-fourth); }
+.text-primary { color: var(--text-primary); }
+.text-secondary { color: var(--text-secondary); }
+.bg-button-secondary { background-color: var(--button-secondary); }

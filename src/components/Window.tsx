@@ -33,7 +33,7 @@ export function Window({
   const [size, setSize] = useState({ width: defaultWidth, height: defaultHeight });
   const state = windows[id];
 
-  if (!state.isOpen) return null;
+  if (!state?.isOpen) return null;
 
   return (
     <AnimatePresence>
@@ -54,42 +54,49 @@ export function Window({
           onPointerDown={() => focusWindow(id)}
           style={{ zIndex: state.zIndex }}
           className={cn(
-            "fixed window-glass flex flex-col min-w-[320px] min-h-[240px]",
-            activeWindowId === id ? "" : "opacity-95",
+            "fixed window-glass flex flex-col min-w-[320px] min-h-[240px] transition-shadow",
+            activeWindowId === id ? "shadow-2xl" : "shadow-md opacity-95",
             className
           )}
         >
-          {/* Neo-brutalist Title Bar */}
-          <div className="h-10 flex items-center justify-between px-3 gap-4 border-b-3 border-[var(--window-border)] bg-[var(--window-border)] text-[var(--card)] select-none">
-            <div className="flex items-center gap-3">
-              {icon && <div>{icon}</div>}
-              <span className="text-[12px] font-bold tracking-widest uppercase">{title}</span>
-            </div>
-
-            <div className="flex items-center gap-1">
+          {/* OS-like Title Bar */}
+          <div 
+            className="h-10 flex flex-row-reverse md:flex-row items-center justify-between px-3 gap-4 border-b border-bg-fourth bg-secondary text-primary select-none cursor-move"
+          >
+            {/* Window Controls */}
+            <div className="flex items-center gap-2">
+              <button 
+                onClick={(e) => { e.stopPropagation(); closeWindow(id); }}
+                className="w-3.5 h-3.5 flex items-center justify-center rounded-full bg-red-400 hover:bg-red-500 shadow-sm transition-colors text-black/0 hover:text-black/60"
+              >
+                <X className="w-2.5 h-2.5" />
+              </button>
               <button 
                 onClick={(e) => { e.stopPropagation(); minimizeWindow(id); }}
-                className="w-6 h-6 flex items-center justify-center bg-[var(--card)] text-[var(--window-border)] border-2 border-[var(--window-border)] hover:bg-[var(--accent-cyan)] transition-colors"
+                className="w-3.5 h-3.5 flex items-center justify-center rounded-full bg-yellow-400 hover:bg-yellow-500 shadow-sm transition-colors text-black/0 hover:text-black/60"
               >
-                <Minus className="w-3 h-3 font-bold" />
+                <Minus className="w-2.5 h-2.5" />
               </button>
               <button 
                 onClick={(e) => { e.stopPropagation(); maximizeWindow(id); }}
-                className="w-6 h-6 flex items-center justify-center bg-[var(--card)] text-[var(--window-border)] border-2 border-[var(--window-border)] hover:bg-[var(--accent-cyan)] transition-colors"
+                className="w-3.5 h-3.5 flex items-center justify-center rounded-full bg-green-400 hover:bg-green-500 shadow-sm transition-colors text-black/0 hover:text-black/60"
               >
-                <Square className="w-2.5 h-2.5 font-bold" />
-              </button>
-              <button 
-                onClick={(e) => { e.stopPropagation(); closeWindow(id); }}
-                className="w-6 h-6 flex items-center justify-center bg-[var(--accent-magenta)] text-white border-2 border-[var(--window-border)] hover:bg-black transition-colors"
-              >
-                <X className="w-3 h-3 font-bold" />
+                <Square className="w-2 h-2" />
               </button>
             </div>
+
+            {/* Title */}
+            <div className="flex items-center gap-2 font-medium text-xs justify-center absolute left-1/2 -translate-x-1/2">
+              {icon && <div className="text-text-secondary w-3.5 h-3.5">{icon}</div>}
+              <span className="opacity-80 truncate max-w-[200px]">{title}</span>
+            </div>
+            
+            {/* Empty space to balance flex layout on desktop if needed */}
+            <div className="hidden md:block w-16"></div>
           </div>
 
-          <div className="flex-1 overflow-auto bg-[var(--card)] p-0 relative">
-            <div className="min-h-full pb-6">
+          <div className="flex-1 overflow-auto bg-primary relative">
+            <div className="min-h-full">
               {children}
             </div>
             
@@ -106,11 +113,9 @@ export function Window({
                     height: Math.max(240, prev.height + info.delta.y)
                   }));
                 }}
-                className="absolute bottom-0 right-0 w-6 h-6 cursor-nwse-resize z-[100] flex items-end justify-end p-1 group"
+                className="absolute bottom-0 right-0 w-4 h-4 cursor-nwse-resize z-[100] flex items-end justify-end p-0.5 group"
                 onPointerDown={(e) => e.stopPropagation()}
-              >
-                <div className="w-3 h-3 border-r-2 border-b-2 border-black dark:border-[#05d9e8] opacity-30 group-hover:opacity-100 transition-opacity" />
-              </motion.div>
+              />
             )}
           </div>
         </motion.div>
